@@ -52,6 +52,12 @@
                 "title": "Not Supported",
                 "description": "Options cannot be edited when configured via YAML."
             },
+            "add_crowd_completed": {
+                "title": "Device added",
+                "description": "Please consider submitting the device data to the crowdsource database at: https://github.com/cavefire/localtuya-crowdsource",
+                "product_id": "Product ID",
+                "crowdsource_config": "Entity Configuration (no private data, only friendly names)"
+            },
             "init": {
                 "title": "LocalTuya Configuration",
                 "description": "Please select the desired action.",
@@ -103,6 +109,7 @@
                     "local_key": "Local key",
                     "protocol_version": "Protocol Version",
                     "enable_debug": "Enable debugging for this device (debug must be enabled also in configuration.yaml)",
+                    "crowd_setup": "Scan repository for device configuration (Crowdsource)",
                     "scan_interval": "Scan interval (seconds, only when not updating automatically)",
                     "entities": "Entities (uncheck an entity to remove it)",
                     "add_entities": "Add more entities in 'edit device' mode",
