@@ -1,0 +1,28 @@
+[
+  {
+    "friendly_name": "Volume",
+    "id": 5,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "mute;low;middle;high",
+    "select_options_friendly": "Mute;Quiet;Normal;Loud"
+  },
+  {
+    "friendly_name": "Alarm time",
+    "id": 7,
+    "is_passive_entity": false,
+    "max_value": 30,
+    "min_value": 1,
+    "platform": "number",
+    "restore_on_reconnect": true,
+    "step_size": 1
+  },
+  {
+    "friendly_name": "Siren",
+    "id": 13,
+    "is_passive_entity": false,
+    "platform": "switch",
+    "restore_on_reconnect": false
+  }
+]

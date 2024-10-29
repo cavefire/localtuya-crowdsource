@@ -1,0 +1,90 @@
+[
+  {
+    "current_temperature_dp": 3,
+    "friendly_name": "HVAC",
+    "heuristic_action": false,
+    "hvac_action_dp": 1,
+    "hvac_action_set": "True/False",
+    "hvac_mode_dp": 4,
+    "hvac_mode_set": "manual/auto",
+    "id": 1,
+    "max_temperature_const": 35,
+    "min_temperature_const": 7,
+    "platform": "climate",
+    "precision": 1,
+    "target_precision": 0.1,
+    "target_temperature_dp": 2,
+    "temperature_step": 0.1,
+    "temperature_unit": "celsius"
+  },
+  {
+    "dps_default_value": "auto",
+    "friendly_name": "Mode",
+    "id": 4,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "hot;cold;wet;wind;auto",
+    "select_options_friendly": "Heat;Cool;Dry;Fan;Auto"
+  },
+  {
+    "dps_default_value": "auto",
+    "friendly_name": "Fan",
+    "id": 5,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "mute;low;mid_low;mid;mid_high;high;strong;auto",
+    "select_options_friendly": "Mute;Low;Mid Low;Mid;Mid High;High;Strong;Auto"
+  },
+  {
+    "dps_default_value": "0",
+    "friendly_name": "Vertical Swing",
+    "id": 113,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "0;1;2;3",
+    "select_options_friendly": "Off;Full;Top;Bottom"
+  },
+  {
+    "dps_default_value": "0",
+    "friendly_name": "Horizontal Swing",
+    "id": 114,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "0;1;2;3;4",
+    "select_options_friendly": "Off;Full;Left;Middle;Right"
+  },
+  {
+    "dps_default_value": "0008",
+    "friendly_name": "Settings",
+    "id": 123,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "0000;0010;0008;0018",
+    "select_options_friendly": "Display & Buzzer off;Display off, Buzzer on;Display on, Buzzer off;Display & Buzzer on"
+  },
+  {
+    "dps_default_value": "0",
+    "friendly_name": "Vertical Position",
+    "id": 126,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "0;1;2;3;4;5",
+    "select_options_friendly": "Off;Top;Upper Third;Middle;Lower Third;Bottom"
+  },
+  {
+    "dps_default_value": "0",
+    "friendly_name": "Horizontal Position",
+    "id": 127,
+    "is_passive_entity": false,
+    "platform": "select",
+    "restore_on_reconnect": true,
+    "select_options": "0;1;2;3;4;5",
+    "select_options_friendly": "Off;Left;Left Third;Middle;Right Third;Right"
+  }
+]
