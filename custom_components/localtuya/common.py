@@ -4,6 +4,7 @@ import json.decoder
 import logging
 import time
 from datetime import timedelta
+import requests
 
 from homeassistant.const import (
     CONF_DEVICE_ID,
@@ -35,6 +36,7 @@ from .const import (
     CONF_PASSIVE_ENTITY,
     CONF_PROTOCOL_VERSION,
     CONF_RESET_DPIDS,
+    CONF_PRODUCT_KEY,
     CONF_RESTORE_ON_RECONNECT,
     DATA_CLOUD,
     DOMAIN,
@@ -59,6 +61,33 @@ def prepare_setup_entities(hass, config_entry, platform):
     return tuyainterface, entities_to_setup
 
 
+async def upload_suggested_config(config_entry, hass):
+    configurations = {}
+
+    for dev_id in config_entry.data[CONF_DEVICES]:
+        device = config_entry.data[CONF_DEVICES][dev_id]
+        product_key = device.get(CONF_PRODUCT_KEY)
+        
+        if configurations.get(product_key) is None:
+            configurations[product_key] = []
+        configurations[product_key].append(device.get("entities"))
+
+    logging.getLogger("TC").warning(f"Configurations: {configurations}")
+
+    url = f"https://localtuya.mine.li/suggest"
+
+    def post(url, json):
+        return requests.post(url, json=json)
+
+    try:
+        response = await hass.async_add_executor_job(post, url, configurations)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as ex:
+        logging.getLogger("TC").error(f"Failed to upload suggested config: {ex}")
+        return
+
+    logging.getLogger("TC").warning(f"Uploaded suggested config: {response.text}")
+
 async def async_setup_entry(
     domain, entity_class, flow_schema, hass, config_entry, async_add_entities
 ):
@@ -68,6 +97,8 @@ async def async_setup_entry(
     entity_class with functools.partial.
     """
     entities = []
+
+    await upload_suggested_config(config_entry, hass)
 
     for dev_id in config_entry.data[CONF_DEVICES]:
         # entities_to_setup = prepare_setup_entities(
@@ -127,7 +158,9 @@ def async_config_entry_by_device_id(hass, device_id):
         if device_id in entry.data.get(CONF_DEVICES, []):
             return entry
         else:
-            _LOGGER.warning(f"Missing device configuration for device_id {device_id}")
+            # TODO: maybe auto setup??
+            #_LOGGER.warning(f"Missing device configuration for device_id {device_id}")
+            pass
     return None
 
 
@@ -162,6 +195,14 @@ class TuyaDevice(pytuya.TuyaListener, pytuya.ContextualLogger):
         # This has to be done in case the device type is type_0d
         for entity in self._dev_config_entry[CONF_ENTITIES]:
             self.dps_to_request[entity[CONF_ID]] = None
+
+    async def async_write_config(self):
+        def write(path):
+            with open(path, "w", encoding="utf-8") as report_file:
+                report_file.write(json.dumps(self._config_entry, indent=4))
+
+        _LOGGER.debug(f"Writing config entry to file: {self._config_entry}")
+        await self._hass.async_add_executor_job(write, f'localtuya.json')
 
     def add_entities(self, entities):
         """Set the entities associated with this device."""
@@ -453,6 +494,7 @@ class LocalTuyaEntity(RestoreEntity, pytuya.ContextualLogger):
             "manufacturer": "Tuya",
             "model": f"{model} ({self._dev_config_entry[CONF_DEVICE_ID]})",
             "sw_version": self._dev_config_entry[CONF_PROTOCOL_VERSION],
+            "model_id": self._dev_config_entry.get(CONF_PRODUCT_KEY, "tuya_device"),
         }
 
     @property

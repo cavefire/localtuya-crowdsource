@@ -3,6 +3,8 @@ import errno
 import logging
 import time
 from importlib import import_module
+import requests
+import json
 
 import homeassistant.helpers.config_validation as cv
 import homeassistant.helpers.entity_registry as er
@@ -21,9 +23,10 @@ from homeassistant.const import (
     CONF_PLATFORM,
     CONF_REGION,
     CONF_SCAN_INTERVAL,
-    CONF_USERNAME,
+    CONF_USERNAME
 )
 from homeassistant.core import callback
+import functools
 
 from .cloud_api import TuyaCloudApi
 from .common import pytuya
@@ -38,10 +41,12 @@ from .const import (
     CONF_MANUAL_DPS,
     CONF_MODEL,
     CONF_NO_CLOUD,
+    CONF_PRODUCT_KEY,
     CONF_PRODUCT_NAME,
     CONF_PROTOCOL_VERSION,
     CONF_RESET_DPIDS,
     CONF_SETUP_CLOUD,
+    CONF_CROWD_SETUP,
     CONF_USER_ID,
     CONF_ENABLE_ADD_ENTITIES,
     DATA_CLOUD,
@@ -98,6 +103,7 @@ DEVICE_SCHEMA = vol.Schema(
         vol.Optional(CONF_SCAN_INTERVAL): int,
         vol.Optional(CONF_MANUAL_DPS): cv.string,
         vol.Optional(CONF_RESET_DPIDS): str,
+        vol.Required(CONF_CROWD_SETUP, default=True): bool
     }
 )
 
@@ -593,6 +599,51 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
                         return await self.async_step_configure_entity()
 
                 self.dps_strings = await validate_input(self.hass, user_input)
+
+                if(user_input.get(CONF_CROWD_SETUP)):
+                    _LOGGER.info("Crowdsource setup enabled")
+                    _LOGGER.debug("Product ID: %s", cloud_devs[dev_id].get(CONF_PRODUCT_KEY))
+
+                    product_id = cloud_devs[dev_id].get(CONF_PRODUCT_KEY)
+                    if product_id:
+                        url = f"https://raw.githubusercontent.com/cavefire/localtuya-crowdsource/refs/heads/master/entities/{product_id}/config.json"
+
+                        func = functools.partial(
+                            requests.get, url
+                        )
+                        response = await self.hass.async_add_executor_job(func)
+                        if not response.ok:
+                            if response.status_code == 404:
+                                _LOGGER.error("Crowdsource config not found: %s", response.status_code)
+                                errors["base"] = "crowdsource_not_found"
+                            else:
+                                _LOGGER.error("Crowdsource config request failed: %s", response.status_code)
+                                errors["base"] = "crowdsource_request_failed"
+                        else:
+                            data = response.json()
+                            _LOGGER.debug("Crowdsource config: %s", data)
+                            if data:
+                                for entity in data:
+                                    entity[CONF_FRIENDLY_NAME] = entity[CONF_FRIENDLY_NAME].replace("{device_name}", cloud_devs[dev_id].get(CONF_NAME))
+
+                                self.entities = data
+                                config = {
+                                    **self.device_data,
+                                    CONF_DPS_STRINGS: self.dps_strings,
+                                    CONF_ENTITIES: self.entities,
+                                }
+                                dev_id = self.device_data.get(CONF_DEVICE_ID)
+                                new_data = self.config_entry.data.copy()
+                                new_data[ATTR_UPDATED_AT] = str(int(time.time() * 1000))
+                                new_data[CONF_DEVICES].update({dev_id: config})
+
+                                self.hass.config_entries.async_update_entry(
+                                    self.config_entry,
+                                    data=new_data,
+                                )
+
+                                return await self.async_step_add_crowd_completed()
+
                 return await self.async_step_pick_entity_type()
             except CannotConnect:
                 errors["base"] = "cannot_connect"
@@ -649,6 +700,22 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
             errors=errors,
             description_placeholders=placeholders,
         )
+    
+    async def async_step_add_crowd_completed(self, user_input=None):
+        """Showing completion message after crowdsource setup or asking user for uploading."""
+
+        if user_input is None:
+            return self.async_create_entry(title="", data={})
+
+        entries_json = json.dumps(self.entities, indent=2)
+        schama = vol.Schema({
+            vol.Optional("product_id", default=self.config_entry.data[CONF_DEVICES][self.device_data.get(CONF_DEVICE_ID)].get(CONF_PRODUCT_KEY)): str,
+            vol.Optional("crowdsource_config", default=entries_json): str,
+        })
+        return self.async_show_form(
+            step_id="add_crowd_completed",
+            data_schema=schama,
+        )
 
     async def async_step_pick_entity_type(self, user_input=None):
         """Handle asking if user wants to add another entity."""
@@ -670,7 +737,7 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
                     self.config_entry,
                     data=new_data,
                 )
-                return self.async_create_entry(title="", data={})
+                return self.async_step_add_crowd_completed()
 
             self.selected_platform = user_input[PLATFORM_TO_ADD]
             return await self.async_step_configure_entity()
@@ -710,7 +777,7 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
                     title=self.device_data[CONF_FRIENDLY_NAME],
                     data=self.device_data,
                 )
-                return self.async_create_entry(title="", data={})
+                return self.async_step_add_crowd_completed()
 
         schema = platform_schema(
             self.current_entity[CONF_PLATFORM], self.dps_strings, allow_id=False
@@ -758,7 +825,7 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
                         self.config_entry,
                         data=new_data,
                     )
-                    return self.async_create_entry(title="", data={})
+                    return self.async_step_add_crowd_completed()
             else:
                 user_input[CONF_PLATFORM] = self.selected_platform
                 self.entities.append(strip_dps_values(user_input, self.dps_strings))
