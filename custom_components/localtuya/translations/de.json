@@ -1,0 +1,180 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Gerät wurde bereits konfiguriert.",
+      "device_updated": "Gerätekonfiguration wurde aktualisiert!"
+    },
+    "error": {
+      "authentication_failed": "Authentifizierung fehlgeschlagen.\n{msg}",
+      "cannot_connect": "Verbindung zum Gerät kann nicht hergestellt werden. Überprüfe die Adresse und versuche es erneut.",
+      "device_list_failed": "Geräteliste konnte nicht abgerufen werden.\n{msg}",
+      "invalid_auth": "Authentifizierung mit dem Gerät fehlgeschlagen. Überprüfe die Geräte-ID und den lokalen Schlüssel.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten. Siehe Protokoll für Details.",
+      "entity_already_configured": "Eine Entität mit dieser ID wurde bereits konfiguriert.",
+      "address_in_use": "Die Adresse für die Erkennung wird bereits verwendet. Stelle sicher, dass keine andere Anwendung sie benutzt (TCP-Port 6668).",
+      "discovery_failed": "Ein Fehler ist bei der Erkennung von Geräten aufgetreten. Siehe Protokoll für Details.",
+      "empty_dps": "Verbindung zum Gerät erfolgreich, aber keine Datenpunkte gefunden. Bitte versuche es erneut. Erstelle ein neues Problem und füge Debug-Logs hinzu, falls das Problem weiterhin besteht."
+    },
+    "step": {
+      "user": {
+        "title": "Cloud-API-Konto konfigurieren",
+        "description": "Gib die Zugangsdaten für die Tuya Cloud API ein.",
+        "data": {
+          "region": "API-Serverregion",
+          "client_id": "Client-ID",
+          "client_secret": "Geheimnis",
+          "user_id": "Benutzer-ID",
+          "user_name": "Benutzername",
+          "no_cloud": "Cloud-API-Konto nicht konfigurieren"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "already_configured": "Gerät wurde bereits konfiguriert.",
+      "device_success": "Gerät {dev_name} erfolgreich {action}.",
+      "no_entities": "Alle Entitäten eines Geräts können nicht entfernt werden.\nFalls du das Gerät löschen möchtest, gehe ins Gerätemenü, klicke auf die 3 Punkte im Feld 'Geräteinfo' und drücke den Löschen Knopf."
+    },
+    "error": {
+      "authentication_failed": "Authentifizierung fehlgeschlagen.\n{msg}",
+      "cannot_connect": "Verbindung zum Gerät kann nicht hergestellt werden. Überprüfe die Adresse und versuche es erneut.",
+      "device_list_failed": "Geräteliste konnte nicht abgerufen werden.\n{msg}",
+      "invalid_auth": "Authentifizierung mit dem Gerät fehlgeschlagen. Überprüfe die Geräte-ID und den lokalen Schlüssel.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten. Siehe Protokoll für Details.",
+      "entity_already_configured": "Eine Entität mit dieser ID wurde bereits konfiguriert.",
+      "address_in_use": "Die Adresse für die Erkennung wird bereits verwendet. Stelle sicher, dass keine andere Anwendung sie benutzt (TCP-Port 6668).",
+      "discovery_failed": "Ein Fehler ist bei der Erkennung von Geräten aufgetreten. Siehe Protokoll für Details.",
+      "empty_dps": "Verbindung zum Gerät erfolgreich, aber keine Datenpunkte gefunden. Bitte versuche es erneut. Erstelle ein neues Problem und füge Debug-Logs hinzu, falls das Problem weiterhin besteht."
+    },
+    "step": {
+      "yaml_import": {
+        "title": "Nicht unterstützt",
+        "description": "Optionen können nicht bearbeitet werden, wenn sie über YAML konfiguriert sind."
+      },
+      "add_crowd_completed": {
+        "title": "Gerät hinzugefügt",
+        "description": "Bitte überlege, die Gerätedaten an die Crowdsource-Datenbank zu senden: https://github.com/cavefire/localtuya-crowdsource",
+        "product_id": "Produkt ID",
+        "crowdsource_config": "Entitätenkonfiguration (keine geheimen Daten, lediglich benutzerdefinierter Name)"
+      },
+      "init": {
+        "title": "LocalTuya-Konfiguration",
+        "description": "Bitte wähle die gewünschte Aktion.",
+        "data": {
+          "add_device": "Ein neues Gerät hinzufügen",
+          "edit_device": "Ein Gerät bearbeiten",
+          "setup_cloud": "Cloud-API-Konto neu konfigurieren"
+        }
+      },
+      "add_device": {
+        "title": "Ein neues Gerät hinzufügen",
+        "description": "Wähle eines der automatisch erkannten Geräte oder `...` um manuell ein Gerät hinzuzufügen.",
+        "data": {
+          "selected_device": "Entdeckte Geräte"
+        }
+      },
+      "edit_device": {
+        "title": "Ein Gerät bearbeiten",
+        "description": "Wähle das konfigurierte Gerät, das du bearbeiten möchtest.",
+        "data": {
+          "selected_device": "Konfigurierte Geräte",
+          "max_temperature_const": "Maximale Temperaturkonstante (optional)",
+          "min_temperature_const": "Minimale Temperaturkonstante (optional)",
+          "hvac_fan_mode_dp": "HVAC-Lüftermodus DP (optional)",
+          "hvac_fan_mode_set": "HVAC-Lüftermodus einstellen (optional)",
+          "hvac_swing_mode_dp": "HVAC-Schwenkmodus DP (optional)",
+          "hvac_swing_mode_set": "HVAC-Schwenkmodus einstellen (optional)"
+        }
+      },
+      "cloud_setup": {
+        "title": "Cloud-API-Konto konfigurieren",
+        "description": "Gib die Zugangsdaten für die Tuya Cloud API ein.",
+        "data": {
+          "region": "API-Serverregion",
+          "client_id": "Client-ID",
+          "client_secret": "Geheimnis",
+          "user_id": "Benutzer-ID",
+          "user_name": "Benutzername",
+          "no_cloud": "Cloud-API-Konto nicht konfigurieren"
+        }
+      },
+      "configure_device": {
+        "title": "Tuya-Gerät konfigurieren",
+        "description": "Gib die Gerätedetails ein{for_device}.",
+        "data": {
+          "friendly_name": "Name",
+          "host": "Host",
+          "device_id": "Geräte-ID",
+          "local_key": "Lokaler Schlüssel",
+          "protocol_version": "Protokollversion",
+          "enable_debug": "Debugging für dieses Gerät aktivieren (Debug muss auch in configuration.yaml aktiviert sein)",
+          "crowd_setup": "Repository nach Gerätekonfiguration durchsuchen (Crowdsource)",
+          "scan_interval": "Scan-Intervall (Sekunden, nur wenn keine automatische Aktualisierung erfolgt)",
+          "entities": "Entitäten (entferne ein Häkchen, um eine Entität zu entfernen)",
+          "add_entities": "Weitere Entitäten im 'Gerät bearbeiten' Modus hinzufügen",
+          "manual_dps_strings": "Manuelle DPS hinzufügen (durch Kommas ',' getrennt) - wird verwendet, wenn die Erkennung nicht funktioniert (optional)",
+          "reset_dpids": "DPIDs für den RESET-Befehl (durch Kommas ',' getrennt) - wird verwendet, wenn das Gerät nach dem Einschalten nicht auf Statusanforderungen reagiert (optional)"
+        }
+      },
+      "pick_entity_type": {
+        "title": "Entitätstyp auswählen",
+        "description": "Bitte wähle den Typ der Entität, den du hinzufügen möchtest.",
+        "data": {
+          "platform_to_add": "Plattform",
+          "no_additional_entities": "Keine weiteren Entitäten hinzufügen"
+        }
+      },
+      "configure_entity": {
+        "title": "Entität konfigurieren",
+        "description": "Bitte fülle die Details für {entity} mit dem Typ `{platform}` aus. Alle Einstellungen außer `ID` können später auf der Optionsseite geändert werden.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Benutzerdefinierter Name",
+          "current": "Aktuell",
+          "current_consumption": "Aktueller Verbrauch",
+          "voltage": "Spannung",
+          "commands_set": "Befehle für Öffnen_Schließen_Stopp",
+          "positioning_mode": "Positionierungsmodus",
+          "current_position_dp": "Aktuelle Position (nur für *Position* Modus)",
+          "set_position_dp": "Position einstellen (nur für *Position* Modus)",
+          "position_inverted": "0-100 Position umkehren (nur für *Position* Modus)",
+          "span_time": "Vollständige Öffnungszeit in Sekunden (nur für *Timed* Modus)",
+          "unit_of_measurement": "Maßeinheit",
+          "device_class": "Geräteklasse",
+          "scaling": "Skalierungsfaktor",
+          "state_on": "Ein-Wert",
+          "state_off": "Aus-Wert",
+          "powergo_dp": "Leistungs-DP (Normalerweise 25 oder 2)",
+          "idle_status_value": "Leerlaufstatus (durch Kommas getrennt)",
+          "returning_status_value": "Statusrückgabe",
+          "docked_status_value": "Docked Status (durch Kommas getrennt)",
+          "fault_dp": "Fehler-DP (Normalerweise 11)",
+          "battery_dp": "Batteriestatus-DP (Normalerweise 14)",
+          "mode_dp": "Modus-DP (Normalerweise 27)",
+          "modes": "Modusliste",
+          "return_mode_command": "Befehl für Rückgabemodus (optional)",
+          "pause_command": "Pause-Befehl (optional)",
+          "volume_level_dp": "Lautstärkestufe-DP",
+          "battery_charging_dp": "Batterielade-DP",
+          "pm25": "PM2,5",
+          "temperature_dp": "Temperatur DP",
+          "temperature_unit": "Temperatur Einheit",
+          "temperature_divider": "Temperatur Teiler",
+          "humidity_dp": "Luftfeuchtigkeit DP",
+          "humidity_unit": "Luftfeuchtigkeit Einheit",
+          "humidity_divider": "Luftfeuchtigkeit Teiler",
+          "pm25_divider": "PM2,5 Teiler",
+          "target_temperature_dp": "Zieltemperatur DP",
+          "hvac_mode_dp": "HVAC-Modus DP",
+          "hvac_mode_values": "HVAC-Modus Werte",
+          "hvac_switch_only": "Schalter-only HVAC",
+          "light_brightness_dp": "Helligkeit DP",
+          "light_brightness_divider": "Helligkeit Teiler",
+          "min_temperature_const": "Minimale Temperaturkonstante (optional)",
+          "max_temperature_const": "Maximale Temperaturkonstante (optional)"
+        }
+      }
+    }
+  }
+}
