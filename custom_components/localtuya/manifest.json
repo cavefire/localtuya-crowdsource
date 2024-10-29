@@ -1,14 +1,16 @@
 {
   "domain": "localtuya",
-  "name": "LocalTuya integration",
+  "name": "LocalTuya - Crowdsource",
   "codeowners": [
-    "@rospogrigio", "@postlund"
+    "@rospogrigio",
+    "@postlund",
+    "@cavefire"
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/rospogrigio/localtuya/",
+  "documentation": "https://github.com/cavefire/localtuya-crowdsource",
   "iot_class": "local_push",
-  "issue_tracker": "https://github.com/rospogrigio/localtuya/issues",
+  "issue_tracker": "https://github.com/cavefire/localtuya-crowdsource/issues",
   "requirements": [],
   "version": "5.2.1"
 }
