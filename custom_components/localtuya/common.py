@@ -61,11 +61,11 @@ def prepare_setup_entities(hass, config_entry, platform):
     return tuyainterface, entities_to_setup
 
 
-async def upload_suggested_config(config_entry, hass):
+async def upload_suggested_config(devices, hass):
     configurations = {}
 
-    for dev_id in config_entry.data[CONF_DEVICES]:
-        device = config_entry.data[CONF_DEVICES][dev_id]
+    for dev_id in devices:
+        device = devices[dev_id]
         product_key = device.get(CONF_PRODUCT_KEY)
         
         if configurations.get(product_key) is None:
@@ -98,7 +98,7 @@ async def async_setup_entry(
     """
     entities = []
 
-    await upload_suggested_config(config_entry, hass)
+    await upload_suggested_config(config_entry.data[CONF_DEVICES], hass)
 
     for dev_id in config_entry.data[CONF_DEVICES]:
         # entities_to_setup = prepare_setup_entities(
@@ -301,6 +301,7 @@ class TuyaDevice(pytuya.TuyaListener, pytuya.ContextualLogger):
                     entity_id,
                     self._dev_config_entry[CONF_HOST],
                 )
+                # TODO: https://developers.home-assistant.io/docs/asyncio_thread_safety/#async_dispatcher_send
                 self._dispatch_status()
 
             signal = f"localtuya_entity_{self._dev_config_entry[CONF_DEVICE_ID]}"
