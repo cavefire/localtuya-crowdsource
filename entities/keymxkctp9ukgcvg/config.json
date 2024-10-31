@@ -1,0 +1,10 @@
+[
+  {
+    "device_class": "garage_door",
+    "friendly_name": "{device_name} Contact Sensor",
+    "id": 3,
+    "platform": "binary_sensor",
+    "state_off": "false",
+    "state_on": "true"
+  }
+]
