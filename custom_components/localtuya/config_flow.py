@@ -29,7 +29,7 @@ from homeassistant.core import callback
 import functools
 
 from .cloud_api import TuyaCloudApi
-from .common import pytuya
+from .common import (upload_suggested_config, pytuya)
 from .const import (
     ATTR_UPDATED_AT,
     CONF_ACTION,
@@ -203,6 +203,7 @@ def platform_schema(platform, dps_strings, allow_id=True, yaml=False):
 def flow_schema(platform, dps_strings):
     """Return flow schema for a specific platform."""
     integration_module = ".".join(__name__.split(".")[:-1])
+    # TODO: https://developers.home-assistant.io/docs/asyncio_blocking_operations/#import_module
     return import_module("." + platform, integration_module).flow_schema(dps_strings)
 
 
@@ -600,11 +601,9 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
 
                 self.dps_strings = await validate_input(self.hass, user_input)
 
-                if(user_input.get(CONF_CROWD_SETUP)):
-                    _LOGGER.info("Crowdsource setup enabled")
-                    _LOGGER.debug("Product ID: %s", cloud_devs[dev_id].get(CONF_PRODUCT_KEY))
-
-                    product_id = cloud_devs[dev_id].get(CONF_PRODUCT_KEY)
+                if user_input.get(CONF_CROWD_SETUP) and self.discovered_devices and self.discovered_devices[dev_id]:
+                    product_id = self.discovered_devices[dev_id]["productKey"]
+                    _LOGGER.debug("Product ID: %s", product_id)
                     if product_id:
                         url = f"https://raw.githubusercontent.com/cavefire/localtuya-crowdsource/refs/heads/master/entities/{product_id}/config.json"
 
@@ -707,10 +706,14 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is None:
             return self.async_create_entry(title="", data={})
 
-        entries_json = json.dumps(self.entities, indent=2)
+        if user_input["upload_crowdsource_config"]:
+            await upload_suggested_config({self.device_data.get(CONF_DEVICE_ID): self.config_entry.data[CONF_DEVICES][self.device_data.get(CONF_DEVICE_ID)]}, self.hass)
+
+        entries_json = json.dumps(self.entities)
         schama = vol.Schema({
             vol.Optional("product_id", default=self.config_entry.data[CONF_DEVICES][self.device_data.get(CONF_DEVICE_ID)].get(CONF_PRODUCT_KEY)): str,
             vol.Optional("crowdsource_config", default=entries_json): str,
+            vol.Optional("upload_crowdsource_config", default=True): bool,
         })
         return self.async_show_form(
             step_id="add_crowd_completed",
@@ -737,7 +740,7 @@ class LocalTuyaOptionsFlowHandler(config_entries.OptionsFlow):
                     self.config_entry,
                     data=new_data,
                 )
-                return self.async_step_add_crowd_completed()
+                return await self.async_step_add_crowd_completed()
 
             self.selected_platform = user_input[PLATFORM_TO_ADD]
             return await self.async_step_configure_entity()
