@@ -61,6 +61,7 @@ _LOGGER = logging.getLogger(__name__)
 ENTRIES_VERSION = 2
 
 PLATFORM_TO_ADD = "platform_to_add"
+SUGGEST_DPS = "suggest_dps"
 NO_ADDITIONAL_ENTITIES = "no_additional_entities"
 SELECTED_DEVICE = "selected_device"
 
