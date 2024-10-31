@@ -17,7 +17,7 @@ from homeassistant.components.light import (
     SUPPORT_EFFECT,
     LightEntity,
 )
-from homeassistant.const import CONF_BRIGHTNESS, CONF_COLOR_TEMP, CONF_SCENE
+from homeassistant.const import CONF_BRIGHTNESS, CONF_COLOR_TEMP, CONF_SCENE, CONF_ID
 
 from .common import LocalTuyaEntity, async_setup_entry
 from .const import (
@@ -33,6 +33,15 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+DP_SUGGESTIONS = {
+    CONF_ID: [1, 20],
+    CONF_COLOR_MODE: [2, 21],
+    CONF_BRIGHTNESS: [3, 22],
+    CONF_COLOR_TEMP: [4, 23],
+    CONF_COLOR: [5, 24],
+}
+
+MIRED_TO_KELVIN_CONST = 1000000
 DEFAULT_MIN_KELVIN = 2700  # MIRED 370
 DEFAULT_MAX_KELVIN = 6500  # MIRED 153
 
