@@ -10,7 +10,7 @@ This is a custom integration for Home Assistant designed to handle Tuya-based de
 
 The primary goal of this fork is to simplify the setup of Tuya devices by leveraging community support for device mapping. By collaborating, this repository will grow to include configurations for various devices, making the setup process faster and easier.
 
-The server source code, used for this project is currently not open source, but will be shortly.
+The server source code, used for this project can be found here: [localtuya-crowdsource-server](https://github.com/cavefire/localtuya-crowdsource-server)
 
 ### How to Contribute
 
