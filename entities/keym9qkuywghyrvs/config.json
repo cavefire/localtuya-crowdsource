@@ -1,0 +1,12 @@
+[
+  {
+    "current": 18,
+    "current_consumption": 19,
+    "friendly_name": "{device_name}",
+    "id": 1,
+    "is_passive_entity": false,
+    "platform": "switch",
+    "restore_on_reconnect": true,
+    "voltage": 20
+  }
+]

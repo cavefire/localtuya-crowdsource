@@ -1,0 +1,16 @@
+[
+  {
+    "friendly_name": "{device_name} Socket 1",
+    "id": 1,
+    "is_passive_entity": false,
+    "platform": "switch",
+    "restore_on_reconnect": true
+  },
+  {
+    "friendly_name": "{device_name} Socket 2",
+    "id": 2,
+    "is_passive_entity": false,
+    "platform": "switch",
+    "restore_on_reconnect": true
+  }
+]

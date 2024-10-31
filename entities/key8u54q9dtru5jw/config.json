@@ -1,0 +1,18 @@
+[
+  {
+    "brightness": 22,
+    "brightness_lower": 10,
+    "brightness_upper": 1000,
+    "color": 24,
+    "color_mode": 21,
+    "color_temp": 26,
+    "color_temp_max_kelvin": 6500,
+    "color_temp_min_kelvin": 2700,
+    "color_temp_reverse": false,
+    "friendly_name": "{device_name}",
+    "id": 20,
+    "music_mode": false,
+    "platform": "light",
+    "scene": 25
+  }
+]
